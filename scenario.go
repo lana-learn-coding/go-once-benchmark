@@ -2,6 +2,7 @@ package scenario
 
 import (
 	"sync"
+	"sync/atomic"
 	"time"
 )
 
@@ -33,6 +34,9 @@ func (s *Scenario) Verify() {
 	s.wg.Wait()
 	if s.touched > 1 {
 		panic("touched more than once")
+	}
+	if s.touched < 1 {
+		panic("did not touch")
 	}
 }
 
@@ -95,7 +99,7 @@ func (s *Scenario) RWLock() {
 
 			lock.Lock()
 			defer lock.Unlock()
-			// Check again, because other goroutine may have changed the IsDone flag.
+			// Check again, because another goroutine may have changed the IsDone flag.
 			if s.check() {
 				return
 			}
@@ -124,7 +128,7 @@ func (s *Scenario) RWLockPreCheck() {
 
 			lock.Lock()
 			defer lock.Unlock()
-			// Check again, because other goroutine may have changed the IsDone flag.
+			// Check again, because another goroutine may have changed the IsDone flag.
 			if s.check() {
 				return
 			}
@@ -142,6 +146,17 @@ func (s *Scenario) OncePrecheck() {
 			if s.check() {
 				return
 			}
+			once.Do(s.doStuff)
+		}()
+	}
+}
+
+func (s *Scenario) Once() {
+	once := &sync.Once{}
+	for i := 0; i < s.GoRoutinesCount; i++ {
+		s.wg.Add(1)
+		go func() {
+			defer s.wg.Done()
 			once.Do(s.doStuff)
 		}()
 	}
@@ -179,6 +194,72 @@ func (s *Scenario) ChannelPrecheck() {
 				<-lock
 			}()
 			if s.check() {
+				return
+			}
+			s.doStuff()
+		}()
+	}
+}
+
+func (s *Scenario) AtomicSwap() {
+	isOk := atomic.Bool{}
+	for i := 0; i < s.GoRoutinesCount; i++ {
+		s.wg.Add(1)
+		go func() {
+			defer s.wg.Done()
+			alreadyRun := isOk.Swap(true)
+			if alreadyRun {
+				return
+			}
+			s.doStuff()
+		}()
+	}
+}
+
+func (s *Scenario) AtomicSwapPrecheck() {
+	isOk := atomic.Bool{}
+	for i := 0; i < s.GoRoutinesCount; i++ {
+		s.wg.Add(1)
+		go func() {
+			defer s.wg.Done()
+			if s.check() {
+				return
+			}
+			alreadyRun := isOk.Swap(true)
+			if alreadyRun {
+				return
+			}
+			s.doStuff()
+		}()
+	}
+}
+
+func (s *Scenario) AtomicCAS() {
+	isOk := atomic.Bool{}
+	for i := 0; i < s.GoRoutinesCount; i++ {
+		s.wg.Add(1)
+		go func() {
+			defer s.wg.Done()
+			canRun := isOk.CompareAndSwap(false, true)
+			if !canRun {
+				return
+			}
+			s.doStuff()
+		}()
+	}
+}
+
+func (s *Scenario) AtomicCASPrecheck() {
+	isOk := atomic.Bool{}
+	for i := 0; i < s.GoRoutinesCount; i++ {
+		s.wg.Add(1)
+		go func() {
+			defer s.wg.Done()
+			if s.check() {
+				return
+			}
+			canRun := isOk.CompareAndSwap(false, true)
+			if !canRun {
 				return
 			}
 			s.doStuff()

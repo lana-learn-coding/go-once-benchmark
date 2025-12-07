@@ -15,10 +15,10 @@ const (
 )
 
 func BenchmarkStandardScenario(b *testing.B) {
-	b.Run("OncePrecheck", func(b *testing.B) {
+	b.Run("Once", func(b *testing.B) {
 		s := newScenario()
 		for b.Loop() {
-			s.OncePrecheck()
+			s.Once()
 			s.VerifyAndReset()
 		}
 	})
@@ -46,9 +46,33 @@ func BenchmarkStandardScenario(b *testing.B) {
 			s.VerifyAndReset()
 		}
 	})
+
+	b.Run("AtomicSwap", func(b *testing.B) {
+		s := newScenario()
+		for b.Loop() {
+			s.AtomicSwap()
+			s.VerifyAndReset()
+		}
+	})
+
+	b.Run("AtomicCAS", func(b *testing.B) {
+		s := newScenario()
+		for b.Loop() {
+			s.AtomicCAS()
+			s.VerifyAndReset()
+		}
+	})
 }
 
 func BenchmarkDoneScenario(b *testing.B) {
+	b.Run("Done Once", func(b *testing.B) {
+		for b.Loop() {
+			s := newDoneScenario()
+			s.Once()
+			s.Verify()
+		}
+	})
+
 	b.Run("Done OncePrecheck", func(b *testing.B) {
 		for b.Loop() {
 			s := newDoneScenario()
@@ -98,9 +122,41 @@ func BenchmarkDoneScenario(b *testing.B) {
 	})
 
 	b.Run("Done ChannelPrecheck", func(b *testing.B) {
-		s := newDoneScenario()
 		for b.Loop() {
+			s := newDoneScenario()
 			s.ChannelPrecheck()
+			s.Verify()
+		}
+	})
+
+	b.Run("Done AtomicSwap", func(b *testing.B) {
+		for b.Loop() {
+			s := newDoneScenario()
+			s.AtomicSwap()
+			s.Verify()
+		}
+	})
+
+	b.Run("Done AtomicSwapPrecheck", func(b *testing.B) {
+		for b.Loop() {
+			s := newDoneScenario()
+			s.AtomicSwapPrecheck()
+			s.Verify()
+		}
+	})
+
+	b.Run("Done AtomicCAS", func(b *testing.B) {
+		for b.Loop() {
+			s := newDoneScenario()
+			s.AtomicCAS()
+			s.Verify()
+		}
+	})
+
+	b.Run("Done AtomicCASPrecheck", func(b *testing.B) {
+		for b.Loop() {
+			s := newDoneScenario()
+			s.AtomicCASPrecheck()
 			s.Verify()
 		}
 	})
