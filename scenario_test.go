@@ -2,6 +2,8 @@ package scenario_test
 
 import (
 	"scenario"
+	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 )
@@ -18,7 +20,7 @@ func BenchmarkStandardScenario(b *testing.B) {
 	b.Run("Once", func(b *testing.B) {
 		s := newScenario()
 		for b.Loop() {
-			s.Once()
+			s.Once(&sync.Once{})
 			s.VerifyAndReset()
 		}
 	})
@@ -50,7 +52,7 @@ func BenchmarkStandardScenario(b *testing.B) {
 	b.Run("AtomicSwap", func(b *testing.B) {
 		s := newScenario()
 		for b.Loop() {
-			s.AtomicSwap()
+			s.AtomicSwap(&atomic.Bool{})
 			s.VerifyAndReset()
 		}
 	})
@@ -58,7 +60,7 @@ func BenchmarkStandardScenario(b *testing.B) {
 	b.Run("AtomicCAS", func(b *testing.B) {
 		s := newScenario()
 		for b.Loop() {
-			s.AtomicCAS()
+			s.AtomicCAS(&atomic.Bool{})
 			s.VerifyAndReset()
 		}
 	})
@@ -66,9 +68,11 @@ func BenchmarkStandardScenario(b *testing.B) {
 
 func BenchmarkDoneScenario(b *testing.B) {
 	b.Run("Done Once", func(b *testing.B) {
+		once := &sync.Once{}
+		once.Do(func() {})
 		for b.Loop() {
 			s := newDoneScenario()
-			s.Once()
+			s.Once(once)
 			s.Verify()
 		}
 	})
@@ -130,9 +134,11 @@ func BenchmarkDoneScenario(b *testing.B) {
 	})
 
 	b.Run("Done AtomicSwap", func(b *testing.B) {
+		ok := &atomic.Bool{}
+		ok.Store(true)
 		for b.Loop() {
 			s := newDoneScenario()
-			s.AtomicSwap()
+			s.AtomicSwap(ok)
 			s.Verify()
 		}
 	})
@@ -146,9 +152,11 @@ func BenchmarkDoneScenario(b *testing.B) {
 	})
 
 	b.Run("Done AtomicCAS", func(b *testing.B) {
+		ok := &atomic.Bool{}
+		ok.Store(true)
 		for b.Loop() {
 			s := newDoneScenario()
-			s.AtomicCAS()
+			s.AtomicCAS(ok)
 			s.Verify()
 		}
 	})
@@ -173,5 +181,6 @@ func newDoneScenario() scenario.Scenario {
 	return scenario.Scenario{
 		GoRoutinesCount: GoRoutinesCount,
 		IsDone:          true,
+		Touched:         1,
 	}
 }

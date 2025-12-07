@@ -11,7 +11,7 @@ type Scenario struct {
 	DoStuffTook     time.Duration
 	CheckTook       time.Duration
 	IsDone          bool
-	touched         int
+	Touched         int
 	wg              sync.WaitGroup
 }
 
@@ -20,7 +20,7 @@ func (s *Scenario) doStuff() {
 		time.Sleep(s.DoStuffTook)
 	}
 	s.IsDone = true
-	s.touched++
+	s.Touched++
 }
 
 func (s *Scenario) check() bool {
@@ -32,10 +32,10 @@ func (s *Scenario) check() bool {
 
 func (s *Scenario) Verify() {
 	s.wg.Wait()
-	if s.touched > 1 {
-		panic("touched more than once")
+	if s.Touched > 1 {
+		panic("Touched more than once")
 	}
-	if s.touched < 1 {
+	if s.Touched < 1 {
 		panic("did not touch")
 	}
 }
@@ -43,7 +43,7 @@ func (s *Scenario) Verify() {
 func (s *Scenario) VerifyAndReset() {
 	s.Verify()
 	s.IsDone = false
-	s.touched = 0
+	s.Touched = 0
 }
 
 // Lock simple use of Lock.
@@ -151,8 +151,7 @@ func (s *Scenario) OncePrecheck() {
 	}
 }
 
-func (s *Scenario) Once() {
-	once := &sync.Once{}
+func (s *Scenario) Once(once *sync.Once) {
 	for i := 0; i < s.GoRoutinesCount; i++ {
 		s.wg.Add(1)
 		go func() {
@@ -201,8 +200,7 @@ func (s *Scenario) ChannelPrecheck() {
 	}
 }
 
-func (s *Scenario) AtomicSwap() {
-	isOk := atomic.Bool{}
+func (s *Scenario) AtomicSwap(isOk *atomic.Bool) {
 	for i := 0; i < s.GoRoutinesCount; i++ {
 		s.wg.Add(1)
 		go func() {
@@ -234,8 +232,7 @@ func (s *Scenario) AtomicSwapPrecheck() {
 	}
 }
 
-func (s *Scenario) AtomicCAS() {
-	isOk := atomic.Bool{}
+func (s *Scenario) AtomicCAS(isOk *atomic.Bool) {
 	for i := 0; i < s.GoRoutinesCount; i++ {
 		s.wg.Add(1)
 		go func() {

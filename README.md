@@ -48,45 +48,66 @@ The results on my machine (with chrome and some stuff running in the background)
 goos: windows
 goarch: amd64
 pkg: scenario
-cpu: AMD Ryzen 9 7900 12-Core Processor
-BenchmarkStandardScenario/OncePrecheck-24                      1        2004853800 ns/op
-BenchmarkStandardScenario/OncePrecheck-24                      1        2005557700 ns/op
-BenchmarkStandardScenario/OncePrecheck-24                      1        2005833900 ns/op
-BenchmarkStandardScenario/Lock-24                              1        2005363400 ns/op
-BenchmarkStandardScenario/Lock-24                              1        2005569500 ns/op
-BenchmarkStandardScenario/Lock-24                              1        2005285100 ns/op
-BenchmarkStandardScenario/RWLock-24                            1        2001862000 ns/op
-BenchmarkStandardScenario/RWLock-24                            1        2001504600 ns/op
-BenchmarkStandardScenario/RWLock-24                            1        2001793900 ns/op
-BenchmarkStandardScenario/Channel-24                           1        2004951000 ns/op
-BenchmarkStandardScenario/Channel-24                           1        2004595800 ns/op
-BenchmarkStandardScenario/Channel-24                           1        2004771200 ns/op
-BenchmarkDoneScenario/Done_OncePrecheck-24                   962           1198190 ns/op
-BenchmarkDoneScenario/Done_OncePrecheck-24                  1008           1204863 ns/op
-BenchmarkDoneScenario/Done_OncePrecheck-24                  1027           1169837 ns/op
-BenchmarkDoneScenario/Done_Lock-24                           882           1248253 ns/op
-BenchmarkDoneScenario/Done_Lock-24                           998           1258346 ns/op
-BenchmarkDoneScenario/Done_Lock-24                           903           1267249 ns/op
-BenchmarkDoneScenario/Done_LockPrecheck-24                  1040           1167875 ns/op
-BenchmarkDoneScenario/Done_LockPrecheck-24                   937           1198665 ns/op
-BenchmarkDoneScenario/Done_LockPrecheck-24                  1010           1177499 ns/op
-BenchmarkDoneScenario/Done_RWLock-24                        1023           1195476 ns/op
-BenchmarkDoneScenario/Done_RWLock-24                        1021           1217294 ns/op
-BenchmarkDoneScenario/Done_RWLock-24                        1014           1195385 ns/op
-BenchmarkDoneScenario/Done_RWLockPreCheck-24                1034           1188411 ns/op
-BenchmarkDoneScenario/Done_RWLockPreCheck-24                1002           1183191 ns/op
-BenchmarkDoneScenario/Done_RWLockPreCheck-24                1033           1217335 ns/op
-BenchmarkDoneScenario/Done_Channel-24                        254           4716841 ns/op
-BenchmarkDoneScenario/Done_Channel-24                        252           4830221 ns/op
-BenchmarkDoneScenario/Done_Channel-24                        242           4826638 ns/op
-BenchmarkDoneScenario/Done_ChannelPrecheck-24               1017           1183201 ns/op
-BenchmarkDoneScenario/Done_ChannelPrecheck-24               1026           1172154 ns/op
-BenchmarkDoneScenario/Done_ChannelPrecheck-24                966           1202709 ns/op
+cpu: AMD Ryzen 9 7900 12-Core Processor             
+BenchmarkStandardScenario/Once-24                      1        2004738100 ns/op
+BenchmarkStandardScenario/Once-24                      1        2006183300 ns/op
+BenchmarkStandardScenario/Once-24                      1        2005251100 ns/op
+BenchmarkStandardScenario/Lock-24                      1        2005081500 ns/op
+BenchmarkStandardScenario/Lock-24                      1        2005319800 ns/op
+BenchmarkStandardScenario/Lock-24                      1        2005249200 ns/op
+BenchmarkStandardScenario/RWLock-24                    1        2002888600 ns/op
+BenchmarkStandardScenario/RWLock-24                    1        2002059100 ns/op
+BenchmarkStandardScenario/RWLock-24                    1        2002008900 ns/op
+BenchmarkStandardScenario/Channel-24                   1        2004769000 ns/op
+BenchmarkStandardScenario/Channel-24                   1        2004357600 ns/op
+BenchmarkStandardScenario/Channel-24                   1        2004456700 ns/op
+BenchmarkStandardScenario/AtomicSwap-24                1        1999966100 ns/op
+BenchmarkStandardScenario/AtomicSwap-24                1        2000061400 ns/op
+BenchmarkStandardScenario/AtomicSwap-24                1        2000888800 ns/op
+BenchmarkStandardScenario/AtomicCAS-24                 1        2000488700 ns/op
+BenchmarkStandardScenario/AtomicCAS-24                 1        2000083600 ns/op
+BenchmarkStandardScenario/AtomicCAS-24                 1        2000785200 ns/op
+BenchmarkDoneScenario/Done_Once-24                  1051           1131385 ns/op
+BenchmarkDoneScenario/Done_Once-24                  1059           1131741 ns/op
+BenchmarkDoneScenario/Done_Once-24                  1062           1123734 ns/op
+BenchmarkDoneScenario/Done_OncePrecheck-24                  1084           1117444 ns/op
+BenchmarkDoneScenario/Done_OncePrecheck-24                   996           1252450 ns/op
+BenchmarkDoneScenario/Done_OncePrecheck-24                  1028           1131280 ns/op
+BenchmarkDoneScenario/Done_Lock-24                          1015           1199054 ns/op
+BenchmarkDoneScenario/Done_Lock-24                          1021           1198459 ns/op
+BenchmarkDoneScenario/Done_Lock-24                           993           1193328 ns/op
+BenchmarkDoneScenario/Done_LockPrecheck-24                  1041           1132922 ns/op
+BenchmarkDoneScenario/Done_LockPrecheck-24                  1063           1124003 ns/op
+BenchmarkDoneScenario/Done_LockPrecheck-24                  1058           1192098 ns/op
+BenchmarkDoneScenario/Done_RWLock-24                         978           1161744 ns/op
+BenchmarkDoneScenario/Done_RWLock-24                        1060           1201274 ns/op
+BenchmarkDoneScenario/Done_RWLock-24                         986           1207492 ns/op
+BenchmarkDoneScenario/Done_RWLockPreCheck-24                 920           1179833 ns/op
+BenchmarkDoneScenario/Done_RWLockPreCheck-24                 866           1208491 ns/op
+BenchmarkDoneScenario/Done_RWLockPreCheck-24                1078           1128873 ns/op
+BenchmarkDoneScenario/Done_Channel-24                        258           4661335 ns/op
+BenchmarkDoneScenario/Done_Channel-24                        254           5243544 ns/op
+BenchmarkDoneScenario/Done_Channel-24                        240           5015273 ns/op
+BenchmarkDoneScenario/Done_ChannelPrecheck-24                951           1174689 ns/op
+BenchmarkDoneScenario/Done_ChannelPrecheck-24                961           1145474 ns/op
+BenchmarkDoneScenario/Done_ChannelPrecheck-24               1054           1249393 ns/op
+BenchmarkDoneScenario/Done_AtomicSwap-24                    1052           1134125 ns/op
+BenchmarkDoneScenario/Done_AtomicSwap-24                    1036           1159636 ns/op
+BenchmarkDoneScenario/Done_AtomicSwap-24                    1065           1142673 ns/op
+BenchmarkDoneScenario/Done_AtomicSwapPrecheck-24            1062           1130601 ns/op
+BenchmarkDoneScenario/Done_AtomicSwapPrecheck-24            1018           1125005 ns/op
+BenchmarkDoneScenario/Done_AtomicSwapPrecheck-24            1081           1132058 ns/op
+BenchmarkDoneScenario/Done_AtomicCAS-24                     1064           1154833 ns/op
+BenchmarkDoneScenario/Done_AtomicCAS-24                     1045           1160291 ns/op
+BenchmarkDoneScenario/Done_AtomicCAS-24                     1066           1237422 ns/op
+BenchmarkDoneScenario/Done_AtomicCASPrecheck-24             1063           1131400 ns/op
+BenchmarkDoneScenario/Done_AtomicCASPrecheck-24             1052           1141671 ns/op
+BenchmarkDoneScenario/Done_AtomicCASPrecheck-24             1044           1129641 ns/op
 PASS
-ok      scenario        49.370s
+ok      scenario        79.546s
 ```
 
-The results shown that the `sync.RWMutex` gives the best throughput: for 10,000 goroutines 
+The results showed that the `sync.RWMutex` gives the best throughput: for 10,000 goroutines 
 it is about 3ms (or about 60%) faster than other methods.
 
 However, the `sync.RWMutex` method is also more complex than the other methods.
