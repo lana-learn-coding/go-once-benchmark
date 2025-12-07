@@ -6,6 +6,7 @@ Benchmark various ways to ensure that a task is done only once:
 - Using `sync.Mutex`
 - Using `sync.RWMutex`
 - Using `chan`
+- Using `atomic.Bool`
 
 All methods have a `Precheck` variant that checks whether the task is done before
 actually locking.
